@@ -1,0 +1,75 @@
+/* Custom styles for GreenFootprint */
+
+:root {
+    --green-primary: #2E7D32;
+    --green-secondary: #4CAF50;
+    --green-light: #C8E6C9;
+    --green-accent: #81C784;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero-section {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-success {
+    background-color: var(--green-primary);
+    border-color: var(--green-primary);
+    border-radius: 25px;
+    padding: 10px 30px;
+}
+
+.btn-success:hover {
+    background-color: var(--green-secondary);
+    border-color: var(--green-secondary);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-left: 4px solid var(--green-primary);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--green-primary);
+}
+
+.achievement-badge {
+    background: var(--green-light);
+    border-radius: 50px;
+    padding: 5px 15px;
+    margin: 5px;
+    display: inline-block;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
