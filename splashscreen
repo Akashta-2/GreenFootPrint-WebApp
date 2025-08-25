@@ -1,0 +1,551 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Interactive Splash Screen for Student Grade Calculator System
+ * Demonstrates Java GUI programming with animations and modern design
+ * 
+ * @author [Your Name]
+ * @version 1.0
+ */
+public class GradeCalculatorSplashScreen extends JFrame {
+    
+    private static final int SPLASH_WIDTH = 800;
+    private static final int SPLASH_HEIGHT = 600;
+    private static final Color PRIMARY_COLOR = new Color(102, 126, 234);
+    private static final Color SECONDARY_COLOR = new Color(118, 75, 162);
+    private static final Color ACCENT_COLOR = new Color(237, 137, 54);
+    
+    private Timer animationTimer;
+    private Timer progressTimer;
+    private int animationFrame = 0;
+    private int progressValue = 0;
+    private List<Particle> particles;
+    private Random random;
+    
+    // Animation components
+    private JProgressBar progressBar;
+    private JLabel statusLabel;
+    private JLabel titleLabel;
+    private JLabel conceptsLabel;
+    private SplashPanel splashPanel;
+    
+    /**
+     * Constructor - Initialize splash screen components
+     */
+    public GradeCalculatorSplashScreen() {
+        initializeComponents();
+        setupLayout();
+        createParticles();
+        startAnimations();
+        
+        // Center the splash screen
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    
+    /**
+     * Initialize all GUI components
+     */
+    private void initializeComponents() {
+        // Frame setup
+        setTitle("Student Grade Calculator System");
+        setSize(SPLASH_WIDTH, SPLASH_HEIGHT);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setUndecorated(true); // Remove title bar for splash effect
+        setResizable(false);
+        
+        // Initialize random for animations
+        random = new Random();
+        particles = new ArrayList<>();
+        
+        // Create custom panel for splash content
+        splashPanel = new SplashPanel();
+        splashPanel.setLayout(null); // Absolute positioning for precise control
+        
+        // Main title
+        titleLabel = new JLabel("Student Grade Calculator", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBounds(50, 150, SPLASH_WIDTH - 100, 50);
+        titleLabel.setOpaque(false);
+        
+        // Subtitle
+        JLabel subtitleLabel = new JLabel("Java Programming Fundamentals Application", SwingConstants.CENTER);
+        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        subtitleLabel.setForeground(new Color(255, 255, 255, 200));
+        subtitleLabel.setBounds(50, 200, SPLASH_WIDTH - 100, 30);
+        
+        // Programming concepts showcase
+        conceptsLabel = new JLabel("<html><center>Demonstrating:<br/>" +
+                                  "• Object-Oriented Programming<br/>" +
+                                  "• Data Structures & Algorithms<br/>" +
+                                  "• Error Handling & Validation<br/>" +
+                                  "• GUI Development</center></html>", 
+                                  SwingConstants.CENTER);
+        conceptsLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        conceptsLabel.setForeground(new Color(255, 255, 255, 180));
+        conceptsLabel.setBounds(50, 260, SPLASH_WIDTH - 100, 120);
+        
+        // Progress bar
+        progressBar = new JProgressBar(0, 100);
+        progressBar.setBounds(150, 450, SPLASH_WIDTH - 300, 20);
+        progressBar.setStringPainted(true);
+        progressBar.setString("Initializing Java Components...");
+        progressBar.setFont(new Font("Arial", Font.PLAIN, 12));
+        progressBar.setForeground(ACCENT_COLOR);
+        progressBar.setBackground(new Color(255, 255, 255, 100));
+        
+        // Status label
+        statusLabel = new JLabel("Loading System Components...", SwingConstants.CENTER);
+        statusLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        statusLabel.setForeground(new Color(255, 255, 255, 150));
+        statusLabel.setBounds(50, 480, SPLASH_WIDTH - 100, 20);
+        
+        // Version and author info
+        JLabel versionLabel = new JLabel("Version 1.0 | Developed with Java Swing", SwingConstants.CENTER);
+        versionLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+        versionLabel.setForeground(new Color(255, 255, 255, 120));
+        versionLabel.setBounds(50, 520, SPLASH_WIDTH - 100, 20);
+        
+        // Add components to panel
+        splashPanel.add(titleLabel);
+        splashPanel.add(subtitleLabel);
+        splashPanel.add(conceptsLabel);
+        splashPanel.add(progressBar);
+        splashPanel.add(statusLabel);
+        splashPanel.add(versionLabel);
+        
+        add(splashPanel);
+    }
+    
+    /**
+     * Setup the layout and styling
+     */
+    private void setupLayout() {
+        // Add rounded border
+        splashPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 2),
+            BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
+    }
+    
+    /**
+     * Create animated particles for background effect
+     */
+    private void createParticles() {
+        for (int i = 0; i < 50; i++) {
+            particles.add(new Particle(
+                random.nextInt(SPLASH_WIDTH),
+                random.nextInt(SPLASH_HEIGHT),
+                random.nextDouble() * 2 + 1,
+                random.nextDouble() * 0.5 + 0.1
+            ));
+        }
+    }
+    
+    /**
+     * Start all animations
+     */
+    private void startAnimations() {
+        // Main animation timer for particles and effects
+        animationTimer = new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                animationFrame++;
+                updateParticles();
+                splashPanel.repaint();
+            }
+        });
+        animationTimer.start();
+        
+        // Progress bar simulation
+        progressTimer = new Timer(100, new ActionListener() {
+            private String[] loadingMessages = {
+                "Loading Java Virtual Machine...",
+                "Initializing Data Structures...",
+                "Setting up User Interface...",
+                "Configuring Grade Calculator...",
+                "Loading Student Management System...",
+                "Preparing Statistical Analysis...",
+                "Finalizing Application Setup...",
+                "Ready to Launch!"
+            };
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                progressValue += 2;
+                progressBar.setValue(progressValue);
+                
+                // Update loading message
+                int messageIndex = (progressValue / 12) % loadingMessages.length;
+                if (messageIndex < loadingMessages.length) {
+                    statusLabel.setText(loadingMessages[messageIndex]);
+                    progressBar.setString(progressValue + "% - " + loadingMessages[messageIndex]);
+                }
+                
+                // Complete loading
+                if (progressValue >= 100) {
+                    progressTimer.stop();
+                    statusLabel.setText("Launch Complete! Starting Application...");
+                    progressBar.setString("100% - Application Ready!");
+                    
+                    // Auto-close splash after completion
+                    Timer closeTimer = new Timer(2000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            closeSplashScreen();
+                        }
+                    });
+                    closeTimer.setRepeats(false);
+                    closeTimer.start();
+                }
+            }
+        });
+        
+        // Start progress after brief delay
+        Timer startDelay = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                progressTimer.start();
+            }
+        });
+        startDelay.setRepeats(false);
+        startDelay.start();
+    }
+    
+    /**
+     * Update particle positions for animation
+     */
+    private void updateParticles() {
+        for (Particle particle : particles) {
+            particle.update();
+            
+            // Reset particle if it goes off screen
+            if (particle.y > SPLASH_HEIGHT || particle.x > SPLASH_WIDTH || particle.x < 0) {
+                particle.reset(random.nextInt(SPLASH_WIDTH), -10);
+            }
+        }
+    }
+    
+    /**
+     * Close splash screen and launch main application
+     */
+    private void closeSplashScreen() {
+        animationTimer.stop();
+        dispose();
+        
+        // Launch main grade calculator application
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new GradeCalculatorGUI().setVisible(true);
+            } catch (Exception e) {
+                // Fallback to console version
+                System.out.println("Launching Console Version...");
+                // You can integrate your existing Main class here
+                // Main.main(new String[]{});
+            }
+        });
+    }
+    
+    /**
+     * Custom panel for splash screen with gradient background and animations
+     */
+    private class SplashPanel extends JPanel {
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+            
+            // Enable anti-aliasing for smooth graphics
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            
+            // Draw gradient background
+            drawGradientBackground(g2d);
+            
+            // Draw animated particles
+            drawParticles(g2d);
+            
+            // Draw Java logo
+            drawJavaLogo(g2d);
+            
+            // Draw decorative elements
+            drawDecorativeElements(g2d);
+            
+            g2d.dispose();
+        }
+        
+        /**
+         * Draw animated gradient background
+         */
+        private void drawGradientBackground(Graphics2D g2d) {
+            // Create animated gradient
+            float offset = (float) Math.sin(animationFrame * 0.02) * 0.1f;
+            GradientPaint gradient = new GradientPaint(
+                0, 0, PRIMARY_COLOR,
+                getWidth(), getHeight(), 
+                new Color(
+                    SECONDARY_COLOR.getRed(), 
+                    SECONDARY_COLOR.getGreen(), 
+                    SECONDARY_COLOR.getBlue(), 
+                    (int)(255 * (0.8 + offset))
+                )
+            );
+            
+            g2d.setPaint(gradient);
+            g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+            
+            // Add subtle overlay pattern
+            g2d.setColor(new Color(255, 255, 255, 10));
+            for (int i = 0; i < getWidth(); i += 50) {
+                g2d.drawLine(i, 0, i + getHeight(), getHeight());
+            }
+        }
+        
+        /**
+         * Draw animated particles
+         */
+        private void drawParticles(Graphics2D g2d) {
+            for (Particle particle : particles) {
+                g2d.setColor(new Color(255, 255, 255, (int)(particle.opacity * 100)));
+                g2d.fillOval((int)particle.x, (int)particle.y, (int)particle.size, (int)particle.size);
+                
+                // Add glow effect
+                g2d.setColor(new Color(255, 255, 255, (int)(particle.opacity * 50)));
+                g2d.fillOval((int)particle.x - 1, (int)particle.y - 1, 
+                           (int)particle.size + 2, (int)particle.size + 2);
+            }
+        }
+        
+        /**
+         * Draw animated Java logo
+         */
+        private void drawJavaLogo(Graphics2D g2d) {
+            int logoSize = 80;
+            int logoX = getWidth() / 2 - logoSize / 2;
+            int logoY = 50;
+            
+            // Animated logo scaling
+            float scale = 1.0f + (float) Math.sin(animationFrame * 0.05) * 0.1f;
+            g2d.translate(logoX + logoSize/2, logoY + logoSize/2);
+            g2d.scale(scale, scale);
+            g2d.translate(-logoSize/2, -logoSize/2);
+            
+            // Draw logo background
+            GradientPaint logoGradient = new GradientPaint(
+                0, 0, ACCENT_COLOR,
+                logoSize, logoSize, new Color(245, 101, 0)
+            );
+            g2d.setPaint(logoGradient);
+            g2d.fillRoundRect(0, 0, logoSize, logoSize, 15, 15);
+            
+            // Draw "JAVA" text
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Arial", Font.BOLD, 20));
+            FontMetrics fm = g2d.getFontMetrics();
+            String javaText = "JAVA";
+            int textWidth = fm.stringWidth(javaText);
+            int textHeight = fm.getHeight();
+            g2d.drawString(javaText, 
+                         (logoSize - textWidth) / 2, 
+                         (logoSize + textHeight) / 2 - 5);
+            
+            // Reset transformation
+            g2d.setTransform(new AffineTransform());
+        }
+        
+        /**
+         * Draw decorative UI elements
+         */
+        private void drawDecorativeElements(Graphics2D g2d) {
+            // Draw animated circles
+            g2d.setColor(new Color(255, 255, 255, 30));
+            for (int i = 0; i < 3; i++) {
+                int radius = 100 + i * 50;
+                float alpha = (float) Math.sin(animationFrame * 0.03 + i) * 0.5f + 0.5f;
+                g2d.setColor(new Color(255, 255, 255, (int)(alpha * 20)));
+                g2d.drawOval(getWidth()/2 - radius, getHeight()/2 - radius, 
+                           radius * 2, radius * 2);
+            }
+            
+            // Draw corner decorations
+            drawCornerDecorations(g2d);
+        }
+        
+        /**
+         * Draw corner decorative elements
+         */
+        private void drawCornerDecorations(Graphics2D g2d) {
+            g2d.setColor(new Color(255, 255, 255, 50));
+            g2d.setStroke(new BasicStroke(2));
+            
+            // Top-left corner
+            g2d.drawLine(20, 20, 50, 20);
+            g2d.drawLine(20, 20, 20, 50);
+            
+            // Top-right corner
+            g2d.drawLine(getWidth() - 50, 20, getWidth() - 20, 20);
+            g2d.drawLine(getWidth() - 20, 20, getWidth() - 20, 50);
+            
+            // Bottom-left corner
+            g2d.drawLine(20, getHeight() - 50, 20, getHeight() - 20);
+            g2d.drawLine(20, getHeight() - 20, 50, getHeight() - 20);
+            
+            // Bottom-right corner
+            g2d.drawLine(getWidth() - 20, getHeight() - 50, getWidth() - 20, getHeight() - 20);
+            g2d.drawLine(getWidth() - 50, getHeight() - 20, getWidth() - 20, getHeight() - 20);
+        }
+    }
+    
+    /**
+     * Particle class for background animation
+     */
+    private class Particle {
+        double x, y;
+        double velocity;
+        double size;
+        double opacity;
+        double drift;
+        
+        public Particle(double x, double y, double velocity, double opacity) {
+            this.x = x;
+            this.y = y;
+            this.velocity = velocity;
+            this.opacity = opacity;
+            this.size = random.nextDouble() * 4 + 2;
+            this.drift = random.nextDouble() * 2 - 1;
+        }
+        
+        public void update() {
+            y += velocity;
+            x += drift * 0.5;
+            
+            // Subtle size animation
+            size += Math.sin(animationFrame * 0.1) * 0.1;
+            if (size < 1) size = 1;
+            if (size > 6) size = 6;
+        }
+        
+        public void reset(double newX, double newY) {
+            x = newX;
+            y = newY;
+            velocity = random.nextDouble() * 2 + 1;
+            opacity = random.nextDouble() * 0.5 + 0.1;
+            size = random.nextDouble() * 4 + 2;
+            drift = random.nextDouble() * 2 - 1;
+        }
+    }
+    
+    /**
+     * Simple GUI placeholder for main application
+     * (Replace this with your actual grade calculator GUI)
+     */
+    private class GradeCalculatorGUI extends JFrame {
+        public GradeCalculatorGUI() {
+            setTitle("Student Grade Calculator System");
+            setSize(900, 700);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setLocationRelativeTo(null);
+            
+            // Simple placeholder content
+            JLabel welcomeLabel = new JLabel("<html><center><h1>Welcome to Grade Calculator!</h1>" +
+                                           "<p>Your Java application has launched successfully.</p>" +
+                                           "<p>Integrate your existing Main class here for full functionality.</p></center></html>", 
+                                           SwingConstants.CENTER);
+            welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+            
+            JButton startButton = new JButton("Launch Console Version");
+            startButton.setFont(new Font("Arial", Font.BOLD, 14));
+            startButton.addActionListener(e -> {
+                // Launch your existing console application
+                new Thread(() -> {
+                    // Main.main(new String[]{}); // Uncomment to launch console version
+                    System.out.println("Console version would launch here!");
+                }).start();
+            });
+            
+            setLayout(new BorderLayout());
+            add(welcomeLabel, BorderLayout.CENTER);
+            
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.add(startButton);
+            add(buttonPanel, BorderLayout.SOUTH);
+            
+            getContentPane().setBackground(Color.WHITE);
+        }
+    }
+    
+    /**
+     * Main method to launch splash screen
+     */
+    public static void main(String[] args) {
+        // Set system look and feel
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeel());
+        } catch (Exception e) {
+            // Use default look and feel
+        }
+        
+        // Launch splash screen on EDT
+        SwingUtilities.invokeLater(() -> {
+            new GradeCalculatorSplashScreen();
+        });
+    }
+}
+
+/*
+=== SPLASH SCREEN FEATURES ===
+
+✅ Modern gradient background with animations
+✅ Floating particle effects
+✅ Animated Java logo with scaling effect
+✅ Progressive loading simulation
+✅ Dynamic status messages
+✅ Smooth transitions and effects
+✅ Professional branding and typography
+✅ Auto-launch main application
+✅ Responsive design elements
+✅ Corner decorative elements
+
+=== INTEGRATION INSTRUCTIONS ===
+
+1. STANDALONE USAGE:
+   - Compile: javac GradeCalculatorSplashScreen.java
+   - Run: java GradeCalculatorSplashScreen
+
+2. INTEGRATION WITH YOUR CONSOLE APP:
+   - Uncomment the line: Main.main(new String[]{});
+   - Add your Main class to the same package
+   - The splash will auto-launch your console application
+
+3. CUSTOMIZATION OPTIONS:
+   - Change colors by modifying the Color constants
+   - Adjust animation speed by changing timer delays
+   - Modify loading messages in the loadingMessages array
+   - Customize the logo and branding elements
+
+4. GUI VERSION:
+   - Replace GradeCalculatorGUI class with your actual GUI
+   - Add your grade calculator functionality
+   - Integrate with your existing data structures
+
+=== TECHNICAL FEATURES DEMONSTRATED ===
+
+• Java Swing GUI Programming
+• Custom Graphics and Animations
+• Timer-based Animations
+• Object-Oriented Design
+• Event Handling
+• Multi-threading Concepts
+• Graphics2D Advanced Drawing
+• Layout Management
+• Component Customization
+*/
