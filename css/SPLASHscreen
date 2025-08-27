@@ -1,0 +1,159 @@
+{
+    "SUPABASE_URL": "https://dummy.supabase.co",
+    "SUPABASE_ANON_KEY": "dummykey.updateyourkkey.here",
+    "OPENAI_API_KEY": "your-openai-api-key-here",
+    "GEMINI_API_KEY": "your-gemini-api-key-here",
+    "ANTHROPIC_API_KEY": "your-anthropic-api-key-here",
+    "PERPLEXITY_API_KEY": "your-perplexity-api-key-here"
+}
+
+name: earth_healer
+description: A new Flutter project.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+
+dependencies:
+  flutter:       # CRITICAL: Required for every Flutter project - DO NOT REMOVE
+    sdk: flutter # CRITICAL: Required for every Flutter project - DO NOT REMOVE
+  
+  # CRITICAL: Core UI and responsive design - DO NOT REMOVE OR MODIFY
+  sizer: ^2.0.15              # Required for responsive design system
+  flutter_svg: ^2.0.9        # Required for SVG icon support
+  google_fonts: ^6.1.0       # Required for typography (replaces local fonts)
+  shared_preferences: ^2.2.2 # Required for local data storage
+  web: ^1.1.1
+  
+  # Feature dependencies - safe to modify
+  cached_network_image: ^3.3.1
+  connectivity_plus: ^6.1.4
+  dio: ^5.4.0
+  fluttertoast: ^8.2.4
+  fl_chart: ^0.65.0
+
+  universal_html: ^2.2.4
+dev_dependencies:
+  flutter_test:    # CRITICAL: Required for Flutter project testing - DO NOT REMOVE
+    sdk: flutter   # CRITICAL: Required for Flutter project testing - DO NOT REMOVE
+  flutter_lints: ^5.0.0 # CRITICAL: Required for code quality - DO NOT REMOVE
+
+flutter:
+  uses-material-design: true # CRITICAL: Required for Material icon font - DO NOT REMOVE
+  assets:
+    - assets/
+    - assets/images/
+  # CRITICAL ASSET MANAGEMENT RULES:
+  # - DO NOT ADD NEW ASSET DIRECTORIES (assets/svg/, assets/icons/, etc.)
+  # - ONLY USE EXISTING AND ITEMS AVAILABLE IN THE DIRECTORIES LISTED ABOVE (assets/, assets/images/)
+  
+  # CRITICAL FONTS RULE: 
+  # - THIS PROJECT USES GOOGLE FONTS INSTEAD OF LOCAL FONTS
+  # - DO NOT ADD ANY LOCAL FONTS SECTION OR FONT FILES
+# Flutter
+
+A modern Flutter-based mobile application utilizing the latest mobile development technologies and tools for building responsive cross-platform applications.
+
+## 📋 Prerequisites
+
+- Flutter SDK (^3.29.2)
+- Dart SDK
+- Android Studio / VS Code with Flutter extensions
+- Android SDK / Xcode (for iOS development)
+
+## 🛠️ Installation
+
+1. Install dependencies:
+```bash
+flutter pub get
+```
+
+2. Run the application:
+```bash
+flutter run
+```
+
+## 📁 Project Structure
+
+```
+flutter_app/
+├── android/            # Android-specific configuration
+├── ios/                # iOS-specific configuration
+├── lib/
+│   ├── core/           # Core utilities and services
+│   │   └── utils/      # Utility classes
+│   ├── presentation/   # UI screens and widgets
+│   │   └── splash_screen/ # Splash screen implementation
+│   ├── routes/         # Application routing
+│   ├── theme/          # Theme configuration
+│   ├── widgets/        # Reusable UI components
+│   └── main.dart       # Application entry point
+├── assets/             # Static assets (images, fonts, etc.)
+├── pubspec.yaml        # Project dependencies and configuration
+└── README.md           # Project documentation
+```
+
+## 🧩 Adding Routes
+
+To add new routes to the application, update the `lib/routes/app_routes.dart` file:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:package_name/presentation/home_screen/home_screen.dart';
+
+class AppRoutes {
+  static const String initial = '/';
+  static const String home = '/home';
+
+  static Map<String, WidgetBuilder> routes = {
+    initial: (context) => const SplashScreen(),
+    home: (context) => const HomeScreen(),
+    // Add more routes as needed
+  }
+}
+```
+
+## 🎨 Theming
+
+This project includes a comprehensive theming system with both light and dark themes:
+
+```dart
+// Access the current theme
+ThemeData theme = Theme.of(context);
+
+// Use theme colors
+Color primaryColor = theme.colorScheme.primary;
+```
+
+The theme configuration includes:
+- Color schemes for light and dark modes
+- Typography styles
+- Button themes
+- Input decoration themes
+- Card and dialog themes
+
+## 📱 Responsive Design
+
+The app is built with responsive design using the Sizer package:
+
+```dart
+// Example of responsive sizing
+Container(
+  width: 50.w, // 50% of screen width
+  height: 20.h, // 20% of screen height
+  child: Text('Responsive Container'),
+)
+```
+## 📦 Deployment
+
+Build the application for production:
+
+```bash
+# For Android
+flutter build apk --release
+
+# For iOS
+flutter build ios --release
+```
+
